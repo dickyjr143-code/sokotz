@@ -1,0 +1,28 @@
+{
+    "stores": {
+        "moms-juice": {
+            "name": "Mom's Juice Bar (Juisi ya Mama)",
+            "whatsapp": "255712035259",
+            "status": "CLOSED",
+            "items": [
+                {
+                    "id": 1,
+                    "name": "Fresh Mango Juice (Juisi ya Embe)",
+                    "price": 2000,
+                    "unit": "Glass",
+                    "image": "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=300&q=80"
+                },
+                {
+                    "id": 2,
+                    "name": "Passion Fruit Juice (Juisi ya Pasheni)",
+                    "price": 2500,
+                    "unit": "Glass",
+                    "image": "https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=300&q=80"
+                }
+            ],
+            "views": 5,
+            "location": "https://share.google/5Lf8ANtx55vK5cjp7"
+        }
+    },
+    "pending": {}
+}

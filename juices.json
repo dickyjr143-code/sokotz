@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "name": "Fresh Mango Juice (Juisi ya Embe)",
+        "price": 2000,
+        "unit": "Glass",
+        "image": "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=300&q=80"
+    },
+    {
+        "id": 2,
+        "name": "Passion Fruit Juice (Juisi ya Pasheni)",
+        "price": 2500,
+        "unit": "Glass",
+        "image": "https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=300&q=80"
+    },
+    {
+        "id": 3,
+        "name": "Avocado Shake (Milkshake ya Avokado)",
+        "price": 3000,
+        "unit": "Cup",
+        "image": "https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=300&q=80"
+    },
+    {
+        "id": 4,
+        "name": "Pineapple Juice (Juisi ya Nanasi)",
+        "price": 2000,
+        "unit": "Glass",
+        "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=300&q=80"
+    }
+]
