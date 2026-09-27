@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -16,8 +16,8 @@ def create_app():
     db.init_app(app)
 
     @app.route("/")
-    def home():
-        return "App is running"
+    def index():
+        return render_template("index.html")
 
     with app.app_context():
         db.create_all()
