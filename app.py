@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from urllib.parse import quote
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'sokotz-development-key')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or os.urandom(32)
 
 # Database configuration (Supports local SQLite or Render PostgreSQL)
 database_url = os.environ.get('DATABASE_URL')
@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 
 # Master Admin Credentials
 ADMIN_USER = os.environ.get("ADMIN_USER", "admin")
-ADMIN_PASS = os.environ.get("ADMIN_PASS", "soko2026")
+ADMIN_PASS = os.environ.get("ADMIN_PASS")
 
 # ----------------- MODELS -----------------
 class Store(db.Model):
