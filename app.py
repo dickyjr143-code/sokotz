@@ -51,18 +51,43 @@ class Order(db.Model):
 
 # ----------------- STYLES & UI COMPONENTS -----------------
 COMMON_STYLE = """
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#146c43">
+<link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='icon.svg') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icon.svg') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-    body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    .navbar { background: linear-gradient(135deg, #198754, #146c43); }
+    html { min-height: 100%; -webkit-text-size-adjust: 100%; }
+    body { min-height: 100vh; min-height: 100dvh; background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .navbar { background: linear-gradient(135deg, #198754, #146c43); flex-wrap: wrap; gap: 0.75rem; }
+    .navbar > div { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+    .navbar > div > .btn { margin: 0 !important; }
     .card { border: none; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
     .btn-success { background-color: #198754; border: none; }
     .btn-success:hover { background-color: #146c43; }
-    #ai-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
-    #ai-chat-box { display: none; width: 320px; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); overflow: hidden; margin-bottom: 10px; }
+    #ai-widget { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom)); right: 20px; z-index: 1000; }
+    #ai-chat-box { display: none; width: min(320px, calc(100vw - 24px)); background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); overflow: hidden; margin-bottom: 10px; }
     #ai-messages { height: 250px; overflow-y: auto; padding: 12px; background: #f9f9f9; font-size: 14px; }
+    @media (max-width: 767.98px) {
+        .navbar { align-items: flex-start; padding-left: 1rem !important; padding-right: 1rem !important; }
+        .navbar-brand { white-space: normal; }
+        .navbar > div { width: 100%; justify-content: flex-start; }
+        .navbar > div > .btn { min-height: 44px; }
+        .container { padding-left: 1rem; padding-right: 1rem; }
+        input, select, textarea { font-size: 16px !important; }
+        .input-group .form-control, .input-group .btn { min-height: 48px; }
+        #ai-widget { bottom: calc(12px + env(safe-area-inset-bottom)); right: 12px; }
+    }
 </style>
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/service-worker.js").catch(() => {});
+    });
+}
+</script>
 """
 
 AI_WIDGET_HTML = """
@@ -114,6 +139,17 @@ function sendAIMessage() {
 """
 
 # ----------------- ROUTES -----------------
+
+@app.route('/service-worker.js')
+def service_worker():
+    response = app.send_static_file('service-worker.js')
+    response.headers['Service-Worker-Allowed'] = '/'
+    response.headers['Cache-Control'] = 'no-cache'
+    return response
+
+@app.route('/offline')
+def offline():
+    return app.send_static_file('offline.html')
 
 @app.route('/')
 def index():
@@ -332,6 +368,7 @@ INDEX_TEMPLATE = """
         <a href="/store/login" class="btn btn-outline-warning me-2"><i class="fa-solid fa-right-to-bracket"></i> Store Login</a>
         <a href="/store/register" class="btn btn-warning fw-semibold me-2"><i class="fa-solid fa-plus-circle"></i> Register Store</a>
         <a href="/admin/login" class="btn btn-dark btn-sm"><i class="fa-solid fa-lock"></i> Admin</a>
+        <button id="install-app-button" type="button" class="btn btn-outline-light" hidden><i class="fa-solid fa-download"></i> Install</button>
     </div>
 </nav>
 <div class="container my-4">
@@ -391,6 +428,25 @@ INDEX_TEMPLATE = """
 </div>
 """ + AI_WIDGET_HTML + """
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let installPrompt;
+const installButton = document.getElementById('install-app-button');
+window.addEventListener('beforeinstallprompt', event => {
+    event.preventDefault();
+    installPrompt = event;
+    installButton.hidden = false;
+});
+installButton.addEventListener('click', async () => {
+    if (!installPrompt) return;
+    await installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+    installButton.hidden = true;
+});
+window.addEventListener('appinstalled', () => {
+    installButton.hidden = true;
+});
+</script>
 </body>
 </html>
 """

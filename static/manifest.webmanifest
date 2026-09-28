@@ -1,0 +1,19 @@
+{
+  "name": "SokoTz Local Marketplace",
+  "short_name": "SokoTz",
+  "description": "Discover and order from local stores across Tanzania.",
+  "lang": "en-TZ",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#146c43",
+  "icons": [
+    {
+      "src": "/static/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
